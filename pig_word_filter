@@ -1,0 +1,26 @@
+A = load '/bigrams/table' as (bigram: chararray, year: int, match_count: int, volume_count: int);
+describe A;
+grouped = group A by bigram;
+avgoccurence = foreach grouped generate group, AVG(A.match_count) as avgoccur;
+sorted = order avgoccurence by avgoccur desc;
+top_20 = limit sorted 20;
+describe top_20;
+dump top_20;
+Store top_20 into '/bigrams/top_20';
+
+hadoop fs -cat /bigrams/top_20
+
+A = load '/bigrams/table2' as (bigram: chararray, year: int, match_count: int, volume_count: int);
+describe A;
+grouped = group A by bigram;
+avgoccurence = foreach grouped generate group, AVG(A.match_count) as avgoccur;
+sorted = order avgoccurence by avgoccur desc;
+top_20 = limit sorted 20;
+describe top_20;
+dump top_20;
+Store top_20 into '/bigrams/top_20';
+
+A = load '/bigrams/table2' as (bigram: chararray, year: int, match_count: int, volume_count: int);
+B = filter A by A.year == 1671;
+C = filter B by B.match_count > 100;
+store B into '/bigrams/B';
