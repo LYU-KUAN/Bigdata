@@ -1,0 +1,8 @@
+create table bigrams(bigram string, year int, match_count int, volume int) row format delimited fields terminated by '\t';
+show tables;
+LOAD DATA INPATH '/bigrams/table’ INTO TABLE bigrams;
+SELECT bigram,AVG(match_count) as avg FROM bigrams GROUP BY bigram order by avg desc limit 20;
+
+create table record(bigram string, year int, match_count int, volume int) row format delimited fields terminated by '\t';
+LOAD DATA INPATH '/bigrams/table2’ INTO TABLE record;
+SELECT bigram,year,match_count,volume FROM bigrams WHERE year = 1671 & match_count>100;
